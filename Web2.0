@@ -1,0 +1,378 @@
+from pathlib import Path
+from zipfile import ZipFile, ZIP_DEFLATED
+import shutil
+
+base = Path("/mnt/data/practica3_adaptable")
+if base.exists():
+    shutil.rmtree(base)
+(base / "imaxes").mkdir(parents=True)
+
+# Reuse the previous practice's image asset.
+shutil.copy2(
+    Path("/mnt/data/practica2_estilos/imaxes/recomendacion.jpg"),
+    base / "imaxes" / "recomendacion.jpg"
+)
+
+html = """<!doctype html>
+<html lang="gl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unha recomendación: o ximnasio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <a class="saltar" href="#contido">Saltar ao contido principal</a>
+
+  <header class="cabecera">
+    <p class="etiqueta">Unha actividade para todos</p>
+    <h1>Unha recomendación: o ximnasio</h1>
+    <p>Un espazo para moverse, aprender e coidar da saúde dunha maneira segura.</p>
+  </header>
+
+  <nav class="navegacion" aria-label="Navegación principal">
+    <a href="#proposta">A proposta</a>
+    <a href="#motivos">Por que o recomendamos</a>
+    <a href="#outras">Outras recomendacións</a>
+    <a href="#fonte">Máis información</a>
+  </nav>
+
+  <main id="contido">
+    <section class="experiencia" id="proposta">
+      <div>
+        <h2>Un lugar para manterse activo</h2>
+        <p>
+          O ximnasio é un espazo onde se poden practicar diferentes actividades
+          físicas, como exercicios de forza adaptados, bicicleta estática ou
+          clases en grupo. Cada persoa pode escoller unha actividade axeitada
+          á súa idade, experiencia e condición física. É importante aprender a
+          usar o material correctamente e seguir as indicacións do persoal
+          responsable.
+        </p>
+        <p class="destacado">
+          O máis importante é gozar da actividade física, avanzar ao propio
+          ritmo e realizar os exercicios con seguridade.
+        </p>
+      </div>
+
+      <figure>
+        <img src="imaxes/recomendacion.jpg"
+             alt="Mancuernas colocadas nun soporte dentro dun ximnasio">
+        <figcaption>
+          Material deportivo nun ximnasio. Imaxe creada para esta práctica
+          con axuda dunha ferramenta de intelixencia artificial.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="bloque" id="motivos">
+      <h2>Por que paga a pena</h2>
+      <ul>
+        <li>Permite incorporar a actividade física á rutina semanal.</li>
+        <li>Ofrece distintas opcións para descubrir actividades divertidas.</li>
+        <li>Axuda a desenvolver habilidades como a coordinación e a resistencia.</li>
+        <li>Pode ser unha oportunidade para compartir actividades con outras persoas.</li>
+      </ul>
+      <p>
+        Recoméndase practicar exercicio con sentido común, respectar os
+        descansos e pedir orientación profesional para realizar as actividades
+        de maneira segura.
+      </p>
+    </section>
+
+    <section class="bloque" id="outras">
+      <h2>Outras recomendacións</h2>
+      <p>Hai moitas maneiras de manterse activo. Estas son tres ideas que se poden adaptar aos gustos e posibilidades de cada persoa.</p>
+
+      <div class="recomendacions">
+        <article class="tarxeta">
+          <h3>Quentar antes de empezar</h3>
+          <p>
+            Dedicar uns minutos a movementos suaves axuda a preparar o corpo
+            para a actividade e a comezar con calma.
+          </p>
+        </article>
+
+        <article class="tarxeta">
+          <h3>Probar actividades en grupo</h3>
+          <p>
+            As clases colectivas permiten coñecer actividades diferentes
+            e compartir unha experiencia con outras persoas.
+          </p>
+        </article>
+
+        <article class="tarxeta">
+          <h3>Combinar distintas actividades</h3>
+          <p>
+            Alternar paseos, bicicleta ou exercicios adaptados pode facer
+            que a rutina sexa máis variada e entretida.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="bloque recursos" id="fonte">
+      <h2>Para seguir aprendendo</h2>
+      <p>
+        Pódese consultar a información da Organización Mundial da Saúde sobre
+        actividade física e saúde:
+        <a href="https://www.who.int/news-room/fact-sheets/detail/physical-activity"
+           target="_blank" rel="noopener noreferrer">Actividade física (OMS)</a>.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Esta páxina é un traballo escolar de TIC.</p>
+    <p>
+      Crédito da imaxe: creación propia asistida por intelixencia artificial.
+      Non se empregou unha fotografía externa.
+    </p>
+  </footer>
+
+</body>
+</html>
+"""
+
+css = """:root {
+  color-scheme: light;
+  --ink: #172b4d;
+  --muted: #52627a;
+  --paper: #f4f7fb;
+  --surface: #e8f1fb;
+  --accent: #1769aa;
+  --line: #c7d7e8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.cabecera,
+main,
+.navegacion,
+footer {
+  width: min(100% - 2rem, 66rem);
+  margin-inline: auto;
+}
+
+.saltar {
+  position: absolute;
+  left: 1rem;
+  top: -5rem;
+  z-index: 10;
+  background: var(--ink);
+  color: white;
+  padding: 0.7rem 1rem;
+  border-radius: 0.4rem;
+}
+
+.saltar:focus {
+  top: 1rem;
+}
+
+.cabecera {
+  padding-block: 3.5rem 2rem;
+}
+
+.etiqueta {
+  color: var(--accent);
+  font-family: Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  max-width: 15ch;
+  margin-bottom: 0.75rem;
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  line-height: 1.05;
+}
+
+h2 {
+  line-height: 1.2;
+}
+
+h3 {
+  line-height: 1.3;
+}
+
+.navegacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  border-block: 1px solid var(--line);
+  padding-block: 0.8rem;
+  font-family: Arial, sans-serif;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  color: #0b416d;
+}
+
+a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.experiencia {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.9fr);
+  align-items: center;
+  gap: 2rem;
+  padding-block: 3rem;
+}
+
+.destacado {
+  background: var(--surface);
+  border-left: 4px solid var(--accent);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+}
+
+figure {
+  margin: 0;
+  min-width: 0;
+}
+
+img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+}
+
+figcaption {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-family: Arial, sans-serif;
+  font-size: 0.85rem;
+}
+
+.bloque {
+  border-top: 1px solid var(--line);
+  padding-block: 2rem;
+  margin-top: 1rem;
+}
+
+.bloque li {
+  margin-bottom: 0.5rem;
+}
+
+.recomendacions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.tarxeta {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+
+.tarxeta h3 {
+  margin-bottom: 0.6rem;
+}
+
+.tarxeta p {
+  margin-bottom: 0;
+}
+
+.recursos {
+  background: var(--surface);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+}
+
+footer {
+  margin-top: 2rem;
+  border-top: 1px solid var(--line);
+  padding-block: 1.25rem 2rem;
+  color: var(--muted);
+  font-family: Arial, sans-serif;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+  .experiencia {
+    grid-template-columns: 1fr;
+  }
+
+  .recomendacions {
+    grid-template-columns: 1fr;
+  }
+
+  .cabecera {
+    padding-block: 2.5rem 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+"""
+
+mejoras = """MELLORAS REALIZADAS - PRACTICA 3
+
+1. Engadín unha sección chamada "Outras recomendacións" con tres elementos article.
+   Problema que resolve: organiza tres ideas relacionadas nunha sección clara e fácil de consultar.
+
+2. Creei a clase .recomendacions con CSS Grid e tres columnas, e engadín unha media query para mostrar unha soa columna en pantallas de ata 700 píxeles.
+   Problema que resolve: adapta a distribución a móbiles e evita que os artigos queden demasiado estreitos ou provoquen desprazamento horizontal.
+
+3. Mellorei a accesibilidade engadindo unha ligazón para saltar ao contido, foco visible nas ligazóns, texto alternativo na imaxe e unha xerarquía ordenada de títulos.
+   Problema que resolve: facilita a navegación co teclado e permite comprender mellor a estrutura da páxina.
+"""
+
+(base / "index.html").write_text(html, encoding="utf-8")
+(base / "styles.css").write_text(css, encoding="utf-8")
+(base / "melloras.txt").write_text(mejoras, encoding="utf-8")
+
+zip_path = Path("/mnt/data/practica3_adaptable.zip")
+with ZipFile(zip_path, "w", ZIP_DEFLATED) as zf:
+    for file in base.rglob("*"):
+        if file.is_file():
+            zf.write(file, arcname=file.relative_to(base.parent))
+
+print("Creado:", zip_path, zip_path.stat().st_size, "bytes")
+for f in sorted(base.rglob("*")):
+    if f.is_file():
+        print(f.relative_to(base.parent))
